@@ -1,10 +1,18 @@
-from pydantic import BaseModel, Field, EmailStr
+from pydantic import BaseModel, EmailStr
+from typing import Optional
+
 
 class UserRegister(BaseModel):
-    username: str = Field(..., min_length=3, max_length=50)
-    email: EmailStr = Field(..., regex=r'^\S+@\S+\.\S+$')
-    password: str = Field(..., min_length=6, max_length=100)
+    name: str
+    email: EmailStr
+    password: str
 
 class UserLogin(BaseModel):
-    email: EmailStr = Field(..., regex=r'^\S+@\S+\.\S+$')
-    password: str = Field(..., min_length=6, max_length=100)
+    email: EmailStr
+    password: str
+
+class UserResponse(BaseModel):
+    id: Optional[str] = None
+    name: str
+    email: EmailStr
+    role: str

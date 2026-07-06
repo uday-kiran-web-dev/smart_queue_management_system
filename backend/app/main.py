@@ -1,11 +1,17 @@
 from fastapi import FastAPI
 
+from app.routes.auth import router as auth_router
+
 app = FastAPI(
-    title="SQMS API",
-    description="A simple API for managing the SQMS system",
-    version="0.1.0"
+    title="Queue Management API",
+    version="1.0.0"
 )
+
+app.include_router(auth_router)
+
 
 @app.get("/")
 async def root():
-    return {"message": "SQMS API is running!"}
+    return {
+        "message": "Smart Queue Management API Running"
+    }
