@@ -51,8 +51,9 @@ async def login(user: UserLogin):
 
     access_token = create_access_token(
         {
-            "sub": existing_user["email"],
-            "role": existing_user["role"]
+             "sub": existing_user["email"],
+             "user_id": str(existing_user["_id"]),
+             "role": existing_user["role"]
         }
     )
 

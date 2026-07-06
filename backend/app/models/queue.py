@@ -5,8 +5,6 @@ from datetime import datetime
 
 class QueueCreate(BaseModel):
     department_id: str
-    student_id: str
-
 
 class QueueResponse(BaseModel):
     id: Optional[str] = None

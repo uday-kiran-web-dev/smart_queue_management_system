@@ -19,7 +19,7 @@ async def generate_token_number(department_name: str):
 
     return token
 
-async def create_queue(queue):
+async def create_queue(queue, student_id: str):
 
     department = await db.departments.find_one(
         {"_id": ObjectId(queue.department_id)}
@@ -40,7 +40,7 @@ async def create_queue(queue):
 
         "department_name": department["name"],
 
-        "student_id": queue.student_id,
+        "student_id": student_id,
 
         "status": "waiting",
 
@@ -53,3 +53,45 @@ async def create_queue(queue):
     queue_data["_id"] = str(result.inserted_id)
 
     return queue_data
+
+
+async def get_my_token(student_id: str):
+
+    token = await db.tokens.find_one(
+        {
+            "student_id": student_id,
+            "status": "waiting"
+        }
+    )
+
+    if token:
+        token["_id"] = str(token["_id"])
+
+    return token
+
+async def get_queue_position(student_id: str):
+
+    token = await db.tokens.find_one(
+        {
+            "student_id": student_id,
+            "status": "waiting"
+        }
+    )
+
+    if token is None:
+        return None
+
+    position = await db.tokens.count_documents(
+        {
+            "department_id": token["department_id"],
+            "status": "waiting",
+            "created_at": {
+                "$lt": token["created_at"]
+            }
+        }
+    )
+
+    return {
+        "token_number": token["token_number"],
+        "position": position + 1
+    }
