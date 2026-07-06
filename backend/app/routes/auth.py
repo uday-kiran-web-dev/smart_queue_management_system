@@ -7,12 +7,15 @@ from app.models.user import UserLogin
 from app.services.auth_service import login_user
 from app.core.securtiy import create_access_token
 
+from app.core.dependencies import get_current_user
+from fastapi import Depends
+
 router = APIRouter(
     prefix="/auth",
     tags=["Authentication"]
 )
 
-
+#Register route
 @router.post("/register")
 async def register(user: UserRegister):
 
@@ -33,7 +36,8 @@ async def register(user: UserRegister):
             "role": created_user["role"]
         }
     }
-    
+
+#Login route
 @router.post("/login")
 async def login(user: UserLogin):
 
@@ -61,4 +65,15 @@ async def login(user: UserLogin):
             "email": existing_user["email"],
             "role": existing_user["role"]
         }
+    }
+
+#Get profile route  
+@router.get("/me")
+async def get_profile(
+    current_user=Depends(get_current_user)
+):
+
+    return {
+        "message": "Authenticated",
+        "user": current_user
     }
