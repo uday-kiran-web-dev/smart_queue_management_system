@@ -5,6 +5,7 @@ import Register from "../pages/auth/Register";
 
 import StudentDashboard from "../pages/student/Dashboard";
 import AdminDashboard from "../pages/admin/Dashboard";
+import ProtectedRoute from "./ProtectedRoute";
 
 export default function AppRoutes() {
   return (
@@ -14,9 +15,23 @@ export default function AppRoutes() {
 
         <Route path="/register" element={<Register />} />
 
-        <Route path="/student/dashboard" element={<StudentDashboard />} />
+        <Route
+          path="/student/dashboard"
+          element={
+            <ProtectedRoute>
+              <StudentDashboard />
+            </ProtectedRoute>
+          }
+        />
 
-        <Route path="/admin/dashboard" element={<AdminDashboard />} />
+        <Route
+          path="/admin/dashboard"
+          element={
+            <ProtectedRoute>
+              <AdminDashboard />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );

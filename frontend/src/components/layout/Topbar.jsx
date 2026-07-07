@@ -1,17 +1,37 @@
 import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
+
 import { AuthContext } from "../../context/AuthContext";
 
 export default function Topbar() {
-  const { user } = useContext(AuthContext);
+  const { user, logout } = useContext(AuthContext);
+
+  const navigate = useNavigate();
+
+  function handleLogout() {
+    logout();
+    navigate("/");
+  }
 
   return (
     <header className="flex items-center justify-between border-b bg-white px-6 py-4">
-      <h1 className="text-xl font-bold">Student Dashboard</h1>
-
       <div>
-        <p className="font-semibold">{user?.name}</p>
+        <h1 className="text-xl font-bold">Student Dashboard</h1>
+      </div>
 
-        <p className="text-sm text-gray-500">{user?.email}</p>
+      <div className="flex items-center gap-4">
+        <div className="text-right">
+          <p className="font-semibold">{user?.name}</p>
+
+          <p className="text-sm text-gray-500">{user?.email}</p>
+        </div>
+
+        <button
+          onClick={handleLogout}
+          className="rounded-lg bg-red-600 px-4 py-2 text-white hover:bg-red-700"
+        >
+          Logout
+        </button>
       </div>
     </header>
   );
