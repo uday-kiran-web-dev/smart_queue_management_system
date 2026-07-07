@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import { AuthContext } from "../../context/AuthContext";
 
-export default function Topbar() {
+export default function Topbar({ title = "Dashboard" }) {
   const { user, logout } = useContext(AuthContext);
 
   const navigate = useNavigate();
@@ -16,7 +16,7 @@ export default function Topbar() {
   return (
     <header className="flex items-center justify-between border-b bg-white px-6 py-4">
       <div>
-        <h1 className="text-xl font-bold">Student Dashboard</h1>
+        <h1 className="text-xl font-bold">{title}</h1>
       </div>
 
       <div className="flex items-center gap-4">

@@ -54,7 +54,7 @@ export default function Dashboard() {
   }
 
   return (
-    <DashboardLayout>
+    <DashboardLayout title="Student Dashboard">
       <WelcomeCard />
 
       <div className="mt-6 grid gap-6 md:grid-cols-3">
