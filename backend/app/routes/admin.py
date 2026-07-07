@@ -1,10 +1,12 @@
 from fastapi import APIRouter, Depends, HTTPException
 
 from app.core.dependencies import get_current_user
-
 from app.services.admin_service import (
     get_waiting_queue,
-    call_next_student
+    call_next_student,
+    update_token_status,
+    get_queue_history,
+    dashboard_statistics
 )
 
 router = APIRouter(
@@ -51,3 +53,72 @@ async def call_next(
         )
 
     return token
+
+
+@router.put("/complete/{token_id}")
+async def complete_service(
+    token_id: str,
+    current_user=Depends(get_current_user)
+):
+
+    require_admin(current_user)
+
+    token = await update_token_status(
+        token_id,
+        "completed"
+    )
+
+    if token is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Token not found"
+        )
+
+    return {
+        "message": "Service completed",
+        "token": token
+    }
+
+
+@router.put("/skip/{token_id}")
+async def skip_student(
+    token_id: str,
+    current_user=Depends(get_current_user)
+):
+
+    require_admin(current_user)
+
+    token = await update_token_status(
+        token_id,
+        "skipped"
+    )
+
+    if token is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Token not found"
+        )
+
+    return {
+        "message": "Student skipped",
+        "token": token
+    }
+    
+@router.get("/history")
+async def queue_history(
+    current_user=Depends(get_current_user)
+):
+
+    require_admin(current_user)
+
+    return await get_queue_history()
+
+
+@router.get("/dashboard")
+async def dashboard(
+    current_user=Depends(get_current_user)
+):
+
+    require_admin(current_user)
+
+    return await dashboard_statistics()
