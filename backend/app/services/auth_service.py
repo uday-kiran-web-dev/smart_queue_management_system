@@ -1,6 +1,6 @@
-from app.database import db
-from app.core.securtiy import hash_password
-from app.core.securtiy import verify_password
+from app.database.database import db
+from app.core.security import hash_password, verify_password
+from app.core.constants import ROLE_STUDENT
 
 
 async def register_user(user):
@@ -16,7 +16,7 @@ async def register_user(user):
         "name": user.name,
         "email": user.email,
         "password": hash_password(user.password),
-        "role": "student"
+        "role": ROLE_STUDENT
     }
 
     result = await db.users.insert_one(new_user)

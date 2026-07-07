@@ -1,7 +1,8 @@
 from datetime import datetime
 
 from bson import ObjectId
-from app.database import db
+from app.database.database import db
+from app.core.constants import QUEUE_WAITING
 
 
 async def generate_token_number(department_name: str):
@@ -84,7 +85,7 @@ async def get_queue_position(student_id: str):
     position = await db.tokens.count_documents(
         {
             "department_id": token["department_id"],
-            "status": "waiting",
+            "status": QUEUE_WAITING,
             "created_at": {
                 "$lt": token["created_at"]
             }

@@ -5,7 +5,7 @@ from app.services.auth_service import register_user
 
 from app.models.user import UserLogin
 from app.services.auth_service import login_user
-from app.core.securtiy import create_access_token
+from app.core.security import create_access_token
 
 from app.core.dependencies import get_current_user
 from fastapi import Depends

@@ -1,6 +1,13 @@
 from bson import ObjectId
-from app.database import db
+from app.database.database import db
 from datetime import datetime
+from app.core.constants import (
+    QUEUE_WAITING,
+    QUEUE_CALLED,
+    QUEUE_COMPLETED,
+    QUEUE_SKIPPED,
+    ROLE_STUDENT,
+)
 
 
 async def get_waiting_queue(department_id: str):
@@ -37,12 +44,12 @@ async def call_next_student(department_id: str):
         {"_id": token["_id"]},
         {
             "$set": {
-                "status": "called"
+                "status": QUEUE_CALLED
             }
         }
     )
 
-    token["status"] = "called"
+    token["status"] = QUEUE_CALLED
     token["_id"] = str(token["_id"])
 
     return token
@@ -60,7 +67,7 @@ async def update_token_status(token_id: str, status: str):
         "status": status
     }
     
-    if status == "completed":
+    if status == QUEUE_COMPLETED:
         update_data["completed_at"] = datetime.utcnow()
 
     await db.tokens.update_one(
@@ -93,25 +100,25 @@ async def get_queue_history():
 async def dashboard_statistics():
 
     waiting = await db.tokens.count_documents(
-        {"status": "waiting"}
+        {"status": QUEUE_WAITING}
     )
 
     called = await db.tokens.count_documents(
-        {"status": "called"}
+        {"status": QUEUE_CALLED}
     )
 
     completed = await db.tokens.count_documents(
-        {"status": "completed"}
+        {"status": QUEUE_COMPLETED}
     )
 
     skipped = await db.tokens.count_documents(
-        {"status": "skipped"}
+        {"status": QUEUE_SKIPPED}
     )
 
     departments = await db.departments.count_documents({})
 
     students = await db.users.count_documents(
-        {"role": "student"}
+        {"role": ROLE_STUDENT}
     )
 
     return {

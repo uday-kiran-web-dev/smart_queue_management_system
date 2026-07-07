@@ -1,4 +1,4 @@
-from app.database import db
+from app.database.database import db
 
 
 async def create_department(department):

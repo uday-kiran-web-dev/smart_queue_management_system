@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 
+from app.core.constants import QUEUE_COMPLETED, QUEUE_SKIPPED, ROLE_ADMIN
 from app.core.dependencies import get_current_user
 from app.services.admin_service import (
     get_waiting_queue,
@@ -16,7 +17,7 @@ router = APIRouter(
 
 def require_admin(current_user):
 
-    if current_user["role"] != "admin":
+    if current_user["role"] != ROLE_ADMIN:
         raise HTTPException(
             status_code=403,
             detail="Admin access required"
@@ -65,7 +66,7 @@ async def complete_service(
 
     token = await update_token_status(
         token_id,
-        "completed"
+        QUEUE_COMPLETED
     )
 
     if token is None:
@@ -90,7 +91,7 @@ async def skip_student(
 
     token = await update_token_status(
         token_id,
-        "skipped"
+        QUEUE_SKIPPED
     )
 
     if token is None:
