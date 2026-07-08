@@ -15,31 +15,39 @@ export default function QueueTable({ queue, onComplete, onSkip }) {
         </thead>
 
         <tbody>
-          {queue.map((student) => (
-            <tr key={student._id} className="border-b">
-              <td className="p-4">{student.token_number}</td>
-
-              <td className="p-4">{student.student_id}</td>
-
-              <td className="p-4 capitalize">{student.status}</td>
-
-              <td className="space-x-2 p-4">
-                <button
-                  onClick={() => onComplete(student._id)}
-                  className="rounded bg-green-600 px-3 py-2 text-white"
-                >
-                  Complete
-                </button>
-
-                <button
-                  onClick={() => onSkip(student._id)}
-                  className="rounded bg-yellow-500 px-3 py-2 text-white"
-                >
-                  Skip
-                </button>
+          {queue.length === 0 ? (
+            <tr>
+              <td colSpan="4" className="p-6 text-center text-gray-500">
+                No students waiting in this department.
               </td>
             </tr>
-          ))}
+          ) : (
+            queue.map((student) => (
+              <tr key={student._id} className="border-b">
+                <td className="p-4">{student.token_number}</td>
+
+                <td className="p-4">{student.student_id}</td>
+
+                <td className="p-4 capitalize">{student.status}</td>
+
+                <td className="space-x-2 p-4">
+                  <button
+                    onClick={() => onComplete(student._id)}
+                    className="rounded bg-green-600 px-3 py-2 text-white"
+                  >
+                    Complete
+                  </button>
+
+                  <button
+                    onClick={() => onSkip(student._id)}
+                    className="rounded bg-yellow-500 px-3 py-2 text-white"
+                  >
+                    Skip
+                  </button>
+                </td>
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
     </div>
