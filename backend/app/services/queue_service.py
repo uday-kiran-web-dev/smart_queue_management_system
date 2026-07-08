@@ -3,6 +3,7 @@ from datetime import datetime
 from bson import ObjectId
 from app.database.database import db
 from app.core.constants import QUEUE_WAITING
+from app.core.websocket_manager import manager
 
 
 async def generate_token_number(department_name: str):
@@ -52,6 +53,19 @@ async def create_queue(queue, student_id: str):
     result = await db.tokens.insert_one(queue_data)
 
     queue_data["_id"] = str(result.inserted_id)
+
+    await manager.broadcast({
+        "type": "token_generated",
+        "data": queue_data
+    })
+    
+    await manager.broadcast({
+         "type": "queue_update",
+        "action": "token_generated",
+        "department_id": queue_data["department_id"],
+        "token": queue_data["token_number"],
+        "status": queue_data["status"],
+    })
 
     return queue_data
 

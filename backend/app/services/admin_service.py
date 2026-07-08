@@ -8,6 +8,7 @@ from app.core.constants import (
     QUEUE_SKIPPED,
     ROLE_STUDENT,
 )
+from app.core.websocket_manager import manager
 
 
 async def get_waiting_queue(department_id: str):
@@ -48,6 +49,15 @@ async def call_next_student(department_id: str):
             }
         }
     )
+    
+    await manager.broadcast(
+    {
+        "type": "queue_update",
+        "action": "called",
+        "department_id": department_id,
+        "token": token["token_number"],
+        "status": "called",
+    })
 
     token["status"] = QUEUE_CALLED
     token["_id"] = str(token["_id"])
@@ -76,7 +86,16 @@ async def update_token_status(token_id: str, status: str):
             "$set": update_data
         }
     )
-
+    
+    await manager.broadcast(
+    {
+        "type": "queue_update",
+        "action": status,
+        "department_id": token["department_id"],
+        "token": token["token_number"],
+        "status": status,
+    }
+    )
     token.update(update_data)
     token["_id"] = str(token["_id"])
 

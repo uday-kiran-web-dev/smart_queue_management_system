@@ -14,6 +14,7 @@ import {
 } from "../../services/adminService";
 
 import { getDepartments } from "../../services/dashboardService";
+import useQueueSocket from "../../hooks/useQueueSocket";
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState({
@@ -36,7 +37,6 @@ export default function AdminDashboard() {
       console.error(error);
     }
   }
-
 
   async function loadDepartments() {
     try {
@@ -94,6 +94,14 @@ export default function AdminDashboard() {
 
     await loadDashboard();
   }
+
+  useQueueSocket(() => {
+    loadDashboard();
+
+    if (selectedDepartment) {
+      loadQueue(selectedDepartment);
+    }
+  });
 
   useEffect(() => {
     loadDashboard();

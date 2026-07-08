@@ -4,6 +4,7 @@ import DashboardLayout from "../../components/layout/DashboardLayout";
 import WelcomeCard from "../../components/dashboard/WelcomeCard";
 import StatCard from "../../components/dashboard/StatCard";
 import DepartmentCard from "../../components/dashboard/DepartmentCard";
+import useQueueSocket from "../../hooks/useQueueSocket";
 
 import {
   getDepartments,
@@ -42,6 +43,10 @@ export default function Dashboard() {
     } catch {}
   }
 
+  useQueueSocket(() => {
+    loadDashboard();
+  });
+
   useEffect(() => {
     loadDashboard();
   }, []);
@@ -72,10 +77,7 @@ export default function Dashboard() {
           value={position?.position || "Not in Queue"}
         />
 
-        <StatCard
-          title="Status"
-          value={token?.status || "No Token"}
-        />
+        <StatCard title="Status" value={token?.status || "No Token"} />
       </div>
 
       <h2 className="mt-10 mb-4 text-2xl font-bold">Departments</h2>
