@@ -26,12 +26,9 @@ export default function Topbar({ title = "Dashboard" }) {
           <p className="text-sm text-gray-500">{user?.email}</p>
         </div>
 
-        <button
-          onClick={handleLogout}
-          className="rounded-lg bg-red-600 px-4 py-2 text-white hover:bg-red-700"
-        >
-          Logout
-        </button>
+        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-600 text-white font-bold">
+          {user?.name?.charAt(0).toUpperCase()}
+        </div>
       </div>
     </header>
   );

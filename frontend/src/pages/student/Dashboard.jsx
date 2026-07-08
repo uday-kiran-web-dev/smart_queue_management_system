@@ -14,11 +14,10 @@ import {
 import toast from "react-hot-toast";
 
 export default function Dashboard() {
-  
   const [departments, setDepartments] = useState([]);
 
   const [token, setToken] = useState(null);
-const [loadingToken, setLoadingToken] = useState(false);
+  const [loadingToken, setLoadingToken] = useState(false);
   const [position, setPosition] = useState(null);
 
   async function loadDashboard() {
@@ -58,17 +57,25 @@ const [loadingToken, setLoadingToken] = useState(false);
     }
   }
 
-
   return (
     <DashboardLayout title="Student Dashboard">
       <WelcomeCard />
 
       <div className="mt-6 grid gap-6 md:grid-cols-3">
-        <StatCard title="Current Token" value={token?.token_number || "--"} />
+        <StatCard
+          title="Current Token"
+          value={token?.token_number || "No Token"}
+        />
 
-        <StatCard title="Queue Position" value={position?.position || "--"} />
+        <StatCard
+          title="Queue Position"
+          value={position?.position || "Not in Queue"}
+        />
 
-        <StatCard title="Status" value={token?.status || "--"} />
+        <StatCard
+          title="Status"
+          value={token?.status || "No Token"}
+        />
       </div>
 
       <h2 className="mt-10 mb-4 text-2xl font-bold">Departments</h2>

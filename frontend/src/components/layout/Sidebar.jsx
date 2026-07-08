@@ -1,4 +1,8 @@
 import { Link } from "react-router-dom";
+import clsx from "clsx";
+import { LayoutDashboard, Ticket, User, LogOut } from "lucide-react";
+
+import { NavLink } from "react-router-dom";
 
 export default function Sidebar() {
   return (
@@ -6,24 +10,57 @@ export default function Sidebar() {
       <h2 className="text-2xl font-bold mb-8">Queue System</h2>
 
       <nav className="space-y-4">
-        <Link to="/student/dashboard" className="block hover:text-blue-400">
-          Dashboard
-        </Link>
-
-        <Link
-          to="/student/generate-token"
-          className="block hover:text-blue-400"
+        <NavLink
+          to="/student/dashboard"
+          className={({ isActive }) =>
+            clsx(
+              "flex items-center gap-3 rounded-lg p-3 transition",
+              isActive ? "bg-blue-600 text-white" : "hover:bg-slate-700",
+            )
+          }
         >
+          <LayoutDashboard size={20} />
+          Dashboard
+        </NavLink>
+
+        <NavLink
+          to="/student/generate-token"
+          className={({ isActive }) =>
+            clsx(
+              "flex items-center gap-3 rounded-lg p-3 transition",
+              isActive ? "bg-blue-600 text-white" : "hover:bg-slate-700",
+            )
+          }
+        >
+          <Ticket size={20} />
           Generate Token
-        </Link>
+        </NavLink>
 
-        <Link to="/student/my-queue" className="block hover:text-blue-400">
+        <NavLink
+          to="/student/my-queue"
+          className={({ isActive }) =>
+            clsx(
+              "flex items-center gap-3 rounded-lg p-3 transition",
+              isActive ? "bg-blue-600 text-white" : "hover:bg-slate-700",
+            )
+          }
+        >
+          <Ticket size={20} />
           My Queue
-        </Link>
+        </NavLink>
 
-        <Link to="/student/profile" className="block hover:text-blue-400">
+        <NavLink
+          to="/student/profile"
+          className={({ isActive }) =>
+            clsx(
+              "flex items-center gap-3 rounded-lg p-3 transition",
+              isActive ? "bg-blue-600 text-white" : "hover:bg-slate-700",
+            )
+          }
+        >
+          <User size={20} />
           Profile
-        </Link>
+        </NavLink>
       </nav>
     </aside>
   );

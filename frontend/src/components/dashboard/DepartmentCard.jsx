@@ -8,7 +8,8 @@ export default function DepartmentCard({ department, onGenerate, loading }) {
       <button
         onClick={() => onGenerate(department._id)}
         disabled={loading}
-        className="mt-4 w-full rounded bg-blue-600 py-2 text-white hover:bg-blue-700"
+        variant="primary"
+        className="mt-4 w-full rounded-lg bg-blue-600 p-3 text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
       >
         {loading ? "Generating..." : "Generate Token"}
       </button>
