@@ -11,12 +11,14 @@ import {
   getMyToken,
   getMyPosition,
 } from "../../services/dashboardService";
+import toast from "react-hot-toast";
 
 export default function Dashboard() {
+  
   const [departments, setDepartments] = useState([]);
 
   const [token, setToken] = useState(null);
-
+const [loadingToken, setLoadingToken] = useState(false);
   const [position, setPosition] = useState(null);
 
   async function loadDashboard() {
@@ -46,12 +48,16 @@ export default function Dashboard() {
   }, []);
 
   async function handleGenerateToken(departmentId) {
-    await generateToken(departmentId);
-
-    await loadDashboard();
-
-    alert("Token generated successfully");
+    setLoadingToken(true);
+    try {
+      await generateToken(departmentId);
+      await loadDashboard();
+      toast.success("Token generated successfully");
+    } finally {
+      setLoadingToken(false);
+    }
   }
+
 
   return (
     <DashboardLayout title="Student Dashboard">
@@ -73,6 +79,7 @@ export default function Dashboard() {
             key={department._id}
             department={department}
             onGenerate={handleGenerateToken}
+            loading={loadingToken}
           />
         ))}
       </div>

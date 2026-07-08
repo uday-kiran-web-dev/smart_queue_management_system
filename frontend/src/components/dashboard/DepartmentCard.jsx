@@ -1,4 +1,4 @@
-export default function DepartmentCard({ department, onGenerate }) {
+export default function DepartmentCard({ department, onGenerate, loading }) {
   return (
     <div className="rounded-xl bg-white p-6 shadow hover:shadow-lg transition">
       <h2 className="text-xl font-semibold">{department.name}</h2>
@@ -7,9 +7,10 @@ export default function DepartmentCard({ department, onGenerate }) {
 
       <button
         onClick={() => onGenerate(department._id)}
+        disabled={loading}
         className="mt-4 w-full rounded bg-blue-600 py-2 text-white hover:bg-blue-700"
       >
-        Generate Token
+        {loading ? "Generating..." : "Generate Token"}
       </button>
     </div>
   );

@@ -1,11 +1,20 @@
-export default function Button({ children, type = "submit", loading = false }) {
+export default function Button({ children, loading = false, type = "submit" }) {
   return (
     <button
       type={type}
       disabled={loading}
-      className="w-full rounded-lg bg-blue-600 p-3 font-semibold text-white hover:bg-blue-700 disabled:opacity-50"
+      className="
+                w-full
+                rounded-lg
+                bg-blue-600
+                p-3
+                text-white
+                hover:bg-blue-700
+                disabled:cursor-not-allowed
+                disabled:opacity-50
+            "
     >
-      {loading ? "Please wait..." : children}
+      {loading ? "Loading..." : children}
     </button>
   );
 }

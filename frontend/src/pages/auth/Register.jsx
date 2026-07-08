@@ -8,8 +8,10 @@ import AuthLayout from "../../layouts/AuthLayout";
 import Card from "../../components/ui/Card";
 import Input from "../../components/ui/Input";
 import Button from "../../components/ui/Button";
+import toast from "react-hot-toast";
 
 export default function Register() {
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const {
@@ -19,14 +21,19 @@ export default function Register() {
   } = useForm();
 
   const onSubmit = async (data) => {
+    setLoading(true);
     try {
       await api.post("/auth/register", data);
 
-      alert("Registration successful");
+      //alert("Registration successful");
+      toast.success("Registration successful");
 
       navigate("/");
     } catch (error) {
-      alert(error.response?.data?.detail || "Registration failed");
+      //alert(error.response?.data?.detail || "Registration failed");
+      toast.error(error.response?.data?.detail || "Registration failed");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -60,7 +67,9 @@ export default function Register() {
             error={errors.password}
           />
 
-          <Button>Register</Button>
+          <Button loading={loading} type="submit">
+            Register
+          </Button>
 
           <p className="mt-4 text-center">
             Already have an account?{" "}

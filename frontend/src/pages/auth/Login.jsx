@@ -4,8 +4,11 @@ import { useNavigate, Link } from "react-router-dom";
 
 import api from "../../api/axios";
 import { AuthContext } from "../../context/AuthContext";
+import toast from "react-hot-toast";
+import Button from "../../components/ui/Button";
 
 export default function Login() {
+  const [loading, setLoading] = useState(false);
   const { register, handleSubmit } = useForm();
 
   const { login } = useContext(AuthContext);
@@ -13,10 +16,12 @@ export default function Login() {
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
+    setLoading(true);
     try {
       const response = await api.post("/auth/login", data);
 
       login(response.data);
+      toast.success("Welcome back!");
 
       if (response.data.user.role === "admin") {
         navigate("/admin/dashboard");
@@ -24,7 +29,10 @@ export default function Login() {
         navigate("/student/dashboard");
       }
     } catch (error) {
-      alert(error.response?.data?.detail || "Login failed");
+      //alert(error.response?.data?.detail || "Login failed");
+      toast.error(error.response?.data?.detail || "Login failed");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -51,9 +59,7 @@ export default function Login() {
           className="border p-3 rounded w-full mb-6"
         />
 
-        <button className="bg-blue-600 text-white rounded p-3 w-full hover:bg-blue-700">
-          Login
-        </button>
+        <Button loading={loading}>Login</Button>
 
         <p className="text-center mt-4">
           Don't have an account?{" "}
