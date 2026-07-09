@@ -1,0 +1,6 @@
+/* Styles for the react-datepicker component */
+.react-datepicker__day--disabled {
+    background-color: #f0f0f0;
+    color: #ccc;
+    cursor: not-allowed;
+}

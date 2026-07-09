@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, Link } from "react-router-dom";
 
@@ -7,6 +7,9 @@ import { AuthContext } from "../../context/AuthContext";
 import toast from "react-hot-toast";
 import Button from "../../components/ui/Button";
 
+/* -------------------------------------------------
+  Login component – user login page
+  ------------------------------------------------- */
 export default function Login() {
   const [loading, setLoading] = useState(false);
   const { register, handleSubmit } = useForm();

@@ -1,3 +1,6 @@
+# -------------------------------------------------
+# queue_service.py – Business logic for queue token operations
+# -------------------------------------------------
 from datetime import datetime
 
 from bson import ObjectId
@@ -6,6 +9,9 @@ from app.core.constants import QUEUE_WAITING
 from app.core.websocket_manager import manager
 
 
+# -------------------------------------------------
+# generate_token_number – create a unique token string for a department
+# -------------------------------------------------
 async def generate_token_number(department_name: str):
 
     prefix = "".join(
@@ -21,6 +27,9 @@ async def generate_token_number(department_name: str):
 
     return token
 
+# -------------------------------------------------
+# create_queue – create a new queue token for a student
+# -------------------------------------------------
 async def create_queue(queue, student_id: str):
 
     department = await db.departments.find_one(
@@ -46,7 +55,10 @@ async def create_queue(queue, student_id: str):
 
         "status": "waiting",
 
-        "created_at": datetime.utcnow()
+        "purpose": queue.purpose or "",
+        # Include scheduled time if provided by the client
+        "scheduled_at": getattr(queue, "scheduled_at", None),
+        "created_at": datetime.utcnow().isoformat()
 
     }
 
@@ -70,7 +82,28 @@ async def create_queue(queue, student_id: str):
     return queue_data
 
 
+# -------------------------------------------------
+# get_my_token – retrieve waiting tokens for a student
+# -------------------------------------------------
 async def get_my_token(student_id: str):
+
+    tokens = []
+    cursor = db.tokens.find(
+        {
+            "student_id": student_id
+        }
+    ).sort("created_at", 1)
+
+    async for token in cursor:
+        token["_id"] = str(token["_id"])
+        tokens.append(token)
+
+    return tokens
+
+# -------------------------------------------------
+# get_queue_position – get a student's position in the queue
+# -------------------------------------------------
+async def get_queue_position(student_id: str, department_id: str = None):
 
     token = await db.tokens.find_one(
         {
@@ -78,13 +111,6 @@ async def get_my_token(student_id: str):
             "status": "waiting"
         }
     )
-
-    if token:
-        token["_id"] = str(token["_id"])
-
-    return token
-
-async def get_queue_position(student_id: str):
 
     token = await db.tokens.find_one(
         {

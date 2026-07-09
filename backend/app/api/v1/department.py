@@ -1,3 +1,6 @@
+# -------------------------------------------------
+# department.py – Department API routes
+# -------------------------------------------------
 from fastapi import APIRouter, HTTPException
 
 from app.models.department import DepartmentCreate
@@ -12,6 +15,9 @@ router = APIRouter(
 )
 
 
+# -------------------------------------------------
+# add_department – create a new department
+# -------------------------------------------------
 @router.post("/")
 async def add_department(
     department: DepartmentCreate
@@ -31,6 +37,9 @@ async def add_department(
     }
 
 
+# -------------------------------------------------
+# list_departments – list all departments
+# -------------------------------------------------
 @router.get("/")
 async def list_departments():
 

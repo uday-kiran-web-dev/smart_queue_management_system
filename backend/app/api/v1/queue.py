@@ -1,9 +1,15 @@
+# -------------------------------------------------
+# queue.py – Queue API routes
+# -------------------------------------------------
 from fastapi import APIRouter, HTTPException
 
 from app.models.queue import QueueCreate
 from app.services.queue_service import create_queue, get_my_token, get_queue_position
 from fastapi import Depends
 from app.core.dependencies import get_current_user
+import logging
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(
     prefix="/queue",
@@ -11,26 +17,38 @@ router = APIRouter(
 )
 
 
+# -------------------------------------------------
+# generate_token – generate a new queue token
+# -------------------------------------------------
 @router.post("/generate-token")
 async def generate_token(
     queue: QueueCreate,
     current_user=Depends(get_current_user)
 ):
+    try:
+        created = await create_queue(queue, current_user["user_id"])
 
-    created = await create_queue(queue, current_user["user_id"])
+        if created is None:
+            raise HTTPException(
+                status_code=404,
+                detail="Department not found"
+            )
 
-    if created is None:
+        return {
+            "message": "Token generated successfully",
+            "token": created
+        }
+    except Exception as e:
+        logger.error(f"[Queue] Error generating token: {str(e)}", exc_info=True)
         raise HTTPException(
-            status_code=404,
-            detail="Department not found"
+            status_code=500,
+            detail=f"Error generating token: {str(e)}"
         )
-
-    return {
-        "message": "Token generated successfully",
-        "token": created
-    }
     
 
+# -------------------------------------------------
+# my_token – retrieve current user's token
+# -------------------------------------------------
 @router.get("/my-token")
 async def my_token(
     current_user=Depends(get_current_user)
@@ -48,6 +66,9 @@ async def my_token(
 
     return token
 
+# -------------------------------------------------
+# my_position – get current user's queue position
+# -------------------------------------------------
 @router.get("/my-position")
 async def my_position(
     current_user=Depends(get_current_user)

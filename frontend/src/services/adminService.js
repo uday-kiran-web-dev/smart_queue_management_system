@@ -5,8 +5,20 @@ export const getDashboardStats = async () => {
   return response.data;
 };
 
+// Retrieve waiting queue tokens. If a departmentId is provided, fetch tokens for that department;
+// otherwise fetch all waiting tokens across all departments.
 export const getWaitingQueue = async (departmentId) => {
-  const response = await api.get(`/admin/queue/${departmentId}`);
+  const url = departmentId ? `/admin/queue/${departmentId}` : `/admin/queue`;
+  const response = await api.get(url);
+  return response.data;
+};
+
+// Retrieve all tokens regardless of status (used for the "All" tab)
+export const getAllTokens = async () => {
+  // The admin/history endpoint returns the full token history sorted by creation time.
+  // It includes tokens of all statuses, which matches the requirement for the "All"
+  // view on the admin token‑management page.
+  const response = await api.get("/admin/history");
   return response.data;
 };
 
@@ -27,5 +39,13 @@ export const skipStudent = async (tokenId) => {
 
 export const getQueueHistory = async () => {
   const response = await api.get("/admin/history");
+  return response.data;
+};
+
+export const createDepartment = async ({ name, description }) => {
+  const response = await api.post("/departments/", {
+    name,
+    description,
+  });
   return response.data;
 };

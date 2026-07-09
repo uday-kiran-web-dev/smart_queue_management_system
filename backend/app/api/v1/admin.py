@@ -1,3 +1,6 @@
+# -------------------------------------------------
+# admin.py – Admin API routes
+# -------------------------------------------------
 from fastapi import APIRouter, Depends, HTTPException
 
 from app.core.constants import QUEUE_COMPLETED, QUEUE_SKIPPED, ROLE_ADMIN
@@ -15,6 +18,9 @@ router = APIRouter(
     tags=["Admin"]
 )
 
+# -------------------------------------------------
+# require_admin – ensure user has admin role
+# -------------------------------------------------
 def require_admin(current_user):
 
     if current_user["role"] != ROLE_ADMIN:
@@ -22,6 +28,19 @@ def require_admin(current_user):
             status_code=403,
             detail="Admin access required"
         )
+
+# -------------------------------------------------
+# waiting_queue – get waiting queue for a department
+# -------------------------------------------------
+@router.get("/queue")
+async def all_queue_tokens(
+    current_user=Depends(get_current_user)
+):
+
+    require_admin(current_user)
+
+    return await get_waiting_queue()
+
 
 @router.get("/queue/{department_id}")
 async def waiting_queue(
@@ -35,6 +54,9 @@ async def waiting_queue(
         department_id
     )
 
+# -------------------------------------------------
+# call_next – call next student in queue
+# -------------------------------------------------
 @router.post("/call-next/{department_id}")
 async def call_next(
     department_id: str,
@@ -56,6 +78,9 @@ async def call_next(
     return token
 
 
+# -------------------------------------------------
+# complete_service – mark token as completed
+# -------------------------------------------------
 @router.put("/complete/{token_id}")
 async def complete_service(
     token_id: str,
@@ -81,6 +106,9 @@ async def complete_service(
     }
 
 
+# -------------------------------------------------
+# skip_student – skip a student token
+# -------------------------------------------------
 @router.put("/skip/{token_id}")
 async def skip_student(
     token_id: str,
@@ -105,6 +133,9 @@ async def skip_student(
         "token": token
     }
     
+# -------------------------------------------------
+# queue_history – retrieve queue history
+# -------------------------------------------------
 @router.get("/history")
 async def queue_history(
     current_user=Depends(get_current_user)
@@ -115,6 +146,9 @@ async def queue_history(
     return await get_queue_history()
 
 
+# -------------------------------------------------
+# dashboard – admin dashboard statistics
+# -------------------------------------------------
 @router.get("/dashboard")
 async def dashboard(
     current_user=Depends(get_current_user)
