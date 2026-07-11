@@ -48,6 +48,7 @@ export default function Register() {
             name="name"
             placeholder="Enter your name"
             register={register}
+            validation={{ required: "Name is required" }}
             error={errors.name}
           />
 
@@ -57,6 +58,7 @@ export default function Register() {
             type="email"
             placeholder="Enter your email"
             register={register}
+            validation={{ required: "Email is required" }}
             error={errors.email}
           />
 
@@ -66,6 +68,10 @@ export default function Register() {
             type="password"
             placeholder="Enter your password"
             register={register}
+            validation={{ 
+              required: "Password is required",
+              minLength: { value: 6, message: "Password must be at least 6 characters" }
+            }}
             error={errors.password}
           />
 

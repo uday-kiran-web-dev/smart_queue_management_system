@@ -3,6 +3,7 @@ export default function Input({
   type = "text",
   register,
   name,
+  validation,
   error,
   placeholder,
 }) {
@@ -13,8 +14,10 @@ export default function Input({
       <input
         type={type}
         placeholder={placeholder}
-        {...register(name)}
-        className="w-full rounded-lg border border-gray-300 p-3 focus:border-blue-500 focus:outline-none"
+        {...register(name, validation)}
+        className={`w-full rounded-lg border p-3 focus:outline-none ${
+          error ? "border-red-500 focus:border-red-500" : "border-gray-300 focus:border-blue-500"
+        }`}
       />
 
       {error && <p className="mt-1 text-sm text-red-500">{error.message}</p>}

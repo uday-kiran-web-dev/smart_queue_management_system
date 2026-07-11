@@ -1,12 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
-
 import DashboardLayout from "../../components/layout/DashboardLayout";
-import AdminStatCard from "../../components/admin/AdminStatCard";
+import StatCard from "../../components/dashboard/StatCard";
+import { getDashboardStats } from "../../services/adminService";
+import { Users, UserCheck, CheckCircle2, XCircle } from "lucide-react";
 
 // Main admin dashboard interface
-
-import { getDashboardStats } from "../../services/adminService";
-
 export default function AdminDashboard() {
   const [stats, setStats] = useState({
     waiting: 0,
@@ -31,10 +29,10 @@ export default function AdminDashboard() {
   return (
     <DashboardLayout title="Admin Dashboard">
       <div className="grid gap-6 md:grid-cols-4">
-        <AdminStatCard title="Waiting" value={stats.waiting} />
-        <AdminStatCard title="Called" value={stats.called} />
-        <AdminStatCard title="Completed" value={stats.completed} />
-        <AdminStatCard title="Skipped" value={stats.skipped} />
+        <StatCard title="Waiting" value={stats.waiting} icon={Users} colorType="amber" />
+        <StatCard title="Called" value={stats.called} icon={UserCheck} colorType="blue" />
+        <StatCard title="Completed" value={stats.completed} icon={CheckCircle2} colorType="green" />
+        <StatCard title="Skipped" value={stats.skipped} icon={XCircle} colorType="rose" />
       </div>
     </DashboardLayout>
   );

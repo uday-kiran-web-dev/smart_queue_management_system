@@ -14,6 +14,7 @@ import {
   getMyPosition,
 } from "../../services/dashboardService";
 import toast from "react-hot-toast";
+import { Hash, Users, Activity } from "lucide-react";
 
 // Entry point for the student dashboard
 export default function Dashboard() {
@@ -37,11 +38,12 @@ export default function Dashboard() {
     if (user?.role === "student") {
       try {
         const tokensData = await getMyToken();
-        // Get the latest token
-        const latestToken = Array.isArray(tokensData)
-          ? tokensData[tokensData.length - 1]
-          : tokensData;
-        setToken(latestToken);
+        // Get the latest active token
+        const activeTokens = Array.isArray(tokensData)
+          ? tokensData.filter((t) => t.status === "waiting" || t.status === "called")
+          : [];
+        const currentToken = activeTokens.length > 0 ? activeTokens[activeTokens.length - 1] : null;
+        setToken(currentToken);
       } catch {}
 
       try {
@@ -82,14 +84,27 @@ export default function Dashboard() {
           <StatCard
             title="Current Token"
             value={token?.token_number || "No Token"}
+            icon={Hash}
+            colorType="blue"
           />
 
           <StatCard
             title="Queue Position"
             value={position?.position || "Not in Queue"}
+            icon={Users}
+            colorType="indigo"
           />
 
-          <StatCard title="Status" value={token?.status || "No Token"} />
+          <StatCard 
+            title="Status" 
+            value={token?.status || "No Token"} 
+            icon={Activity}
+            colorType={
+              token?.status === "completed" ? "green" : 
+              token?.status === "waiting" ? "amber" : 
+              token?.status === "skipped" || token?.status === "cancelled" ? "rose" : "slate"
+            }
+          />
         </div>
       )}
 

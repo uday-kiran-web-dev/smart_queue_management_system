@@ -5,12 +5,16 @@ import { useNavigate, Link } from "react-router-dom";
 import api from "../../api/axios";
 import { AuthContext } from "../../context/AuthContext";
 import toast from "react-hot-toast";
+
+import AuthLayout from "../../layouts/AuthLayout";
+import Card from "../../components/ui/Card";
+import Input from "../../components/ui/Input";
 import Button from "../../components/ui/Button";
 
 // User login page
 export default function Login() {
   const [loading, setLoading] = useState(false);
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, formState: { errors } } = useForm();
 
   const { login } = useContext(AuthContext);
 
@@ -30,7 +34,6 @@ export default function Login() {
         navigate("/student/dashboard");
       }
     } catch (error) {
-      //alert(error.response?.data?.detail || "Login failed");
       toast.error(error.response?.data?.detail || "Login failed");
     } finally {
       setLoading(false);
@@ -38,37 +41,41 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="bg-white shadow-lg rounded-xl p-8 w-full max-w-md"
-      >
-        <h1 className="text-3xl font-bold mb-6 text-center">
-          Queue Management
-        </h1>
+    <AuthLayout>
+      <Card title="Login">
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Input
+            label="Email"
+            name="email"
+            type="email"
+            placeholder="Enter your email"
+            register={register}
+            validation={{ required: "Email is required" }}
+            error={errors.email}
+          />
 
-        <input
-          {...register("email")}
-          placeholder="Email"
-          className="border p-3 rounded w-full mb-4"
-        />
+          <Input
+            label="Password"
+            name="password"
+            type="password"
+            placeholder="Enter your password"
+            register={register}
+            validation={{ required: "Password is required" }}
+            error={errors.password}
+          />
 
-        <input
-          {...register("password")}
-          type="password"
-          placeholder="Password"
-          className="border p-3 rounded w-full mb-6"
-        />
+          <Button loading={loading} type="submit">
+            Login
+          </Button>
 
-        <Button loading={loading}>Login</Button>
-
-        <p className="text-center mt-4">
-          Don't have an account?{" "}
-          <Link className="text-blue-600" to="/register">
-            Register
-          </Link>
-        </p>
-      </form>
-    </div>
+          <p className="mt-4 text-center">
+            Don't have an account?{" "}
+            <Link to="/register" className="text-blue-600">
+              Register
+            </Link>
+          </p>
+        </form>
+      </Card>
+    </AuthLayout>
   );
 }
