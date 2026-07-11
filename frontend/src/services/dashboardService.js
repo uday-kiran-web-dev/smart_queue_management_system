@@ -37,3 +37,8 @@ export const updateProfile = async (updateData) => {
   const response = await api.put("/auth/update-profile", updateData);
   return response.data;
 };
+
+export const cancelToken = async (tokenId) => {
+  const response = await api.put(`/queue/cancel-token/${tokenId}`);
+  return response.data;
+};

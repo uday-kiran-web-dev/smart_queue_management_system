@@ -1,6 +1,4 @@
-# -------------------------------------------------
 # security.py – Security utilities (password hashing, JWT)
-# -------------------------------------------------
 from datetime import datetime, timedelta
 
 from jose import JWTError, jwt
@@ -17,23 +15,17 @@ logger = logging.getLogger(__name__)
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
-# -------------------------------------------------
 # hash_password – hash a plain password using bcrypt
-# -------------------------------------------------
 def hash_password(password: str) -> str:
     return pwd_context.hash(password)
 
 
-# -------------------------------------------------
 # verify_password – verify a plain password against hashed version
-# -------------------------------------------------
 def verify_password(plain_password: str, hashed_password: str):
     return pwd_context.verify(plain_password, hashed_password)
 
 
-# -------------------------------------------------
 # create_access_token – generate JWT access token
-# -------------------------------------------------
 def create_access_token(data: dict):
     to_encode = data.copy()
     expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
@@ -43,9 +35,7 @@ def create_access_token(data: dict):
     return encoded_jwt
 
 
-# -------------------------------------------------
 # verify_access_token – validate JWT and return payload
-# -------------------------------------------------
 def verify_access_token(token: str):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])

@@ -1,6 +1,4 @@
-# -------------------------------------------------
 # collections.py – MongoDB collection references
-# -------------------------------------------------
 
 # Import the database instance
 from .database import db

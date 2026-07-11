@@ -11,7 +11,7 @@ export default function DepartmentCard({ department, onGenerate, loading }) {
         variant="primary"
         className="mt-4 w-full rounded-lg bg-blue-600 p-3 text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
       >
-        {loading ? "Generating..." : "Generate Token"}
+        {loading ? "Generating..." : "Get Spot in Line"}
       </button>
     </div>
   );

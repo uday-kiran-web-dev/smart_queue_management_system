@@ -1,6 +1,4 @@
-# -------------------------------------------------
 # auth.py – Authentication API routes
-# -------------------------------------------------
 from fastapi import APIRouter, HTTPException
 
 from app.models.user import UserRegister, UserUpdate
@@ -22,9 +20,7 @@ router = APIRouter(
 )
 
 #Register route
-# -------------------------------------------------
 # register – user registration endpoint
-# -------------------------------------------------
 @router.post("/register")
 async def register(user: UserRegister):
 
@@ -47,9 +43,7 @@ async def register(user: UserRegister):
     }
 
 #Login route
-# -------------------------------------------------
 # login – user login endpoint
-# -------------------------------------------------
 @router.post("/login")
 async def login(user: UserLogin):
 
@@ -84,9 +78,7 @@ async def login(user: UserLogin):
     }
 
 #Get profile route  
-# -------------------------------------------------
 # get_profile – retrieve current user profile
-# -------------------------------------------------
 @router.get("/me")
 async def get_profile(
     current_user=Depends(get_current_user)
@@ -98,9 +90,7 @@ async def get_profile(
     }
 
 #Update profile route
-# -------------------------------------------------
 # update_profile – update current user profile
-# -------------------------------------------------
 @router.put("/update-profile")
 async def update_profile(
     update_data: UserUpdate,

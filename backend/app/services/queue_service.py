@@ -1,6 +1,4 @@
-# -------------------------------------------------
 # queue_service.py – Business logic for queue token operations
-# -------------------------------------------------
 from datetime import datetime
 
 from bson import ObjectId
@@ -9,9 +7,7 @@ from app.core.constants import QUEUE_WAITING
 from app.core.websocket_manager import manager
 
 
-# -------------------------------------------------
 # generate_token_number – create a unique token string for a department
-# -------------------------------------------------
 async def generate_token_number(department_name: str):
 
     prefix = "".join(
@@ -27,9 +23,7 @@ async def generate_token_number(department_name: str):
 
     return token
 
-# -------------------------------------------------
 # create_queue – create a new queue token for a student
-# -------------------------------------------------
 async def create_queue(queue, student_id: str):
 
     department = await db.departments.find_one(
@@ -82,9 +76,7 @@ async def create_queue(queue, student_id: str):
     return queue_data
 
 
-# -------------------------------------------------
 # get_my_token – retrieve waiting tokens for a student
-# -------------------------------------------------
 async def get_my_token(student_id: str):
 
     tokens = []
@@ -100,9 +92,7 @@ async def get_my_token(student_id: str):
 
     return tokens
 
-# -------------------------------------------------
 # get_queue_position – get a student's position in the queue
-# -------------------------------------------------
 async def get_queue_position(student_id: str, department_id: str = None):
 
     token = await db.tokens.find_one(
@@ -136,3 +126,29 @@ async def get_queue_position(student_id: str, department_id: str = None):
         "token_number": token["token_number"],
         "position": position + 1
     }
+
+# cancel_token – cancel a student's own waiting token
+async def cancel_token(token_id: str, student_id: str):
+    token = await db.tokens.find_one({"_id": ObjectId(token_id), "student_id": student_id})
+    if not token:
+        return None
+    if token["status"] != "waiting":
+        return None
+
+    await db.tokens.update_one(
+        {"_id": ObjectId(token_id)},
+        {"$set": {"status": "cancelled"}}
+    )
+    
+    token["status"] = "cancelled"
+    token["_id"] = str(token["_id"])
+    
+    await manager.broadcast({
+         "type": "queue_update",
+         "action": "token_cancelled",
+         "department_id": token["department_id"],
+         "token": token["token_number"],
+         "status": "cancelled",
+    })
+    
+    return token

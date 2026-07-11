@@ -13,27 +13,25 @@ export const getWaitingQueue = async (departmentId) => {
   return response.data;
 };
 
-// Retrieve all tokens regardless of status (used for the "All" tab)
-export const getAllTokens = async () => {
-  // The admin/history endpoint returns the full token history sorted by creation time.
-  // It includes tokens of all statuses, which matches the requirement for the "All"
-  // view on the admin token‑management page.
-  const response = await api.get("/admin/history");
+
+
+export const callStudent = async (tokenId) => {
+  const response = await api.put(`/admin/call/${tokenId}`);
   return response.data;
 };
 
-export const callNextStudent = async (departmentId) => {
-  const response = await api.post(`/admin/call-next/${departmentId}`);
+export const completeService = async (tokenId, feedback) => {
+  const response = await api.put(`/admin/complete/${tokenId}`, { feedback });
   return response.data;
 };
 
-export const completeService = async (tokenId) => {
-  const response = await api.put(`/admin/complete/${tokenId}`);
+export const skipStudent = async (tokenId, feedback) => {
+  const response = await api.put(`/admin/skip/${tokenId}`, { feedback });
   return response.data;
 };
 
-export const skipStudent = async (tokenId) => {
-  const response = await api.put(`/admin/skip/${tokenId}`);
+export const cancelStudent = async (tokenId, feedback) => {
+  const response = await api.put(`/admin/cancel/${tokenId}`, { feedback });
   return response.data;
 };
 

@@ -1,15 +1,11 @@
-# -------------------------------------------------
 # auth_service.py – Business logic for authentication and user management
-# -------------------------------------------------
 from app.database.database import db
 from app.core.security import hash_password, verify_password
 from app.core.constants import ROLE_STUDENT
 from bson import ObjectId
 
 
-# -------------------------------------------------
 # register_user – create a new user account
-# -------------------------------------------------
 async def register_user(user):
 
     existing_user = await db.users.find_one(
@@ -32,9 +28,7 @@ async def register_user(user):
 
     return new_user
 
-# -------------------------------------------------
 # login_user – authenticate a user and return user data
-# -------------------------------------------------
 async def login_user(user):
 
     existing_user = await db.users.find_one(
@@ -53,9 +47,7 @@ async def login_user(user):
     return existing_user
 
 
-# -------------------------------------------------
 # update_user – update user profile information
-# -------------------------------------------------
 async def update_user(user_id: str, update_data: dict):
     
     user = await db.users.find_one(

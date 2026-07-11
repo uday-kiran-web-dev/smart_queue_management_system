@@ -6,27 +6,29 @@ import QueueTable from "../../components/admin/QueueTable";
 
 import { getDepartments } from "../../services/dashboardService";
 import {
-  callNextStudent,
-  completeService,
   getWaitingQueue,
   skipStudent,
-  getAllTokens,
+  getQueueHistory,
+  cancelStudent,
+  callStudent,
+  completeService,
 } from "../../services/adminService";
 import useQueueSocket from "../../hooks/useQueueSocket";
 
 const STATUS_TABS = [
-  { key: "all", title: "All" },
   { key: "waiting", title: "Waiting" },
   { key: "skipped", title: "Skipped" },
   { key: "called", title: "Called" },
   { key: "completed", title: "Completed" },
+  { key: "cancelled", title: "Cancelled" },
+  { key: "all", title: "All" },
 ];
 
 export default function QueueManagement() {
   const [departments, setDepartments] = useState([]);
   const [selectedDepartment, setSelectedDepartment] = useState("");
   const [queue, setQueue] = useState([]);
-  const [activeTab, setActiveTab] = useState("all");
+  const [activeTab, setActiveTab] = useState("waiting");
 
   const loadDepartments = useCallback(async () => {
     try {
@@ -49,7 +51,7 @@ export default function QueueManagement() {
 
   const loadAllTokens = useCallback(async () => {
     try {
-      const response = await getAllTokens();
+      const response = await getQueueHistory();
       setQueue(response);
     } catch (error) {
       console.error(error);
@@ -67,27 +69,34 @@ export default function QueueManagement() {
     }
   }
 
-  async function handleCallNext() {
-    if (!selectedDepartment) return;
-
-    try {
-      await callNextStudent(selectedDepartment);
-      await loadQueue(selectedDepartment);
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  async function handleComplete(tokenId) {
-    await completeService(tokenId);
+  async function handleCall(tokenId) {
+    await callStudent(tokenId);
     await (selectedDepartment
       ? loadQueue(selectedDepartment)
       : loadAllTokens());
   }
 
-  async function handleSkip(tokenId) {
-    await skipStudent(tokenId);
-    await loadQueue(selectedDepartment);
+  async function handleComplete(tokenId, feedback) {
+    await completeService(tokenId, feedback);
+    await (selectedDepartment
+      ? loadQueue(selectedDepartment)
+      : loadAllTokens());
+  }
+
+  async function handleSkip(tokenId, feedback) {
+    await skipStudent(tokenId, feedback);
+    await (selectedDepartment
+      ? loadQueue(selectedDepartment)
+      : loadAllTokens());
+  }
+
+  async function handleCancel(tokenId, feedback) {
+    if (window.confirm("Are you sure you want to cancel this appointment?")) {
+      await cancelStudent(tokenId, feedback);
+      await (selectedDepartment
+        ? loadQueue(selectedDepartment)
+        : loadAllTokens());
+    }
   }
 
   const handleQueueMessage = useCallback(() => {
@@ -119,22 +128,14 @@ export default function QueueManagement() {
   }
 
   return (
-    <DashboardLayout title="Token Management">
+    <DashboardLayout title="Queue Management">
       <DepartmentSelector
         departments={departments}
         selectedDepartment={selectedDepartment}
         onChange={handleDepartmentChange}
       />
 
-      <div className="mb-6">
-        <button
-          onClick={handleCallNext}
-          disabled={!selectedDepartment}
-          className="rounded-lg bg-blue-600 px-5 py-3 text-white hover:bg-blue-700 disabled:opacity-50"
-        >
-          Call Next Student
-        </button>
-      </div>
+
 
       <div className="mb-6 flex flex-wrap gap-2 border-b border-gray-200 pb-3">
         {STATUS_TABS.map((tab) => {
@@ -170,6 +171,8 @@ export default function QueueManagement() {
         queue={filteredQueue}
         onComplete={handleComplete}
         onSkip={handleSkip}
+        onCancel={handleCancel}
+        onCall={handleCall}
       />
     </DashboardLayout>
   );

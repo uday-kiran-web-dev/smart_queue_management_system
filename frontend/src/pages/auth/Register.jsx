@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -10,9 +11,7 @@ import Input from "../../components/ui/Input";
 import Button from "../../components/ui/Button";
 import toast from "react-hot-toast";
 
-/* -------------------------------------------------
-  Register component – user registration page
-  ------------------------------------------------- */
+// User registration page
 export default function Register() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();

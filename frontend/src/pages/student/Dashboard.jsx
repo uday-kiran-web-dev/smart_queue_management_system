@@ -15,9 +15,7 @@ import {
 } from "../../services/dashboardService";
 import toast from "react-hot-toast";
 
-/* -------------------------------------------------
-   Dashboard component – entry point for the student page
-   ------------------------------------------------- */
+// Entry point for the student dashboard
 export default function Dashboard() {
   const { user } = useContext(AuthContext);
   const [departments, setDepartments] = useState([]);
@@ -26,9 +24,7 @@ export default function Dashboard() {
   const [loadingToken, setLoadingToken] = useState(false);
   const [position, setPosition] = useState(null);
 
-  /* -------------------------------------------------
-     loadDashboard – fetches departments, token & position
-     ------------------------------------------------- */
+  // Fetch departments, token & position
   async function loadDashboard() {
     try {
       const departmentsData = await getDepartments();
@@ -55,23 +51,17 @@ export default function Dashboard() {
     }
   }
 
-  /* -------------------------------------------------
-     WebSocket listener – refreshes dashboard on updates
-     ------------------------------------------------- */
+  // Refresh dashboard on queue updates
   useQueueSocket(() => {
     loadDashboard();
   });
 
-  /* -------------------------------------------------
-     useEffect – initial load & reload on role change
-     ------------------------------------------------- */
+  // Initial load & reload on role change
   useEffect(() => {
     loadDashboard();
   }, [user?.role]);
 
-  /* -------------------------------------------------
-     handleGenerateToken – creates a new token for a dept
-     ------------------------------------------------- */
+  // Create a new token for a department
   async function handleGenerateToken(departmentId) {
     setLoadingToken(true);
     try {

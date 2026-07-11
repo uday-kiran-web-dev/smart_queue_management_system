@@ -1,12 +1,8 @@
-# -------------------------------------------------
 # department_service.py – Business logic for department CRUD operations
-# -------------------------------------------------
 from app.database.database import db
 
 
-# -------------------------------------------------
 # create_department – add a new department to the database
-# -------------------------------------------------
 async def create_department(department):
 
     existing = await db.departments.find_one(
@@ -28,9 +24,7 @@ async def create_department(department):
     return new_department
 
 
-# -------------------------------------------------
 # get_departments – retrieve all departments
-# -------------------------------------------------
 async def get_departments():
 
     departments = []

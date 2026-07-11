@@ -1,6 +1,4 @@
-# -------------------------------------------------
 # dependencies.py – Dependency utilities for FastAPI
-# -------------------------------------------------
 from fastapi import Depends, HTTPException
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
@@ -11,9 +9,7 @@ logger = logging.getLogger(__name__)
 security = HTTPBearer()
 
 
-# -------------------------------------------------
 # get_current_user – retrieve and verify current user from JWT
-# -------------------------------------------------
 async def get_current_user(
     credentials: HTTPAuthorizationCredentials = Depends(security)
 ):

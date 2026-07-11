@@ -1,6 +1,4 @@
-# -------------------------------------------------
 # main.py – FastAPI application entry point
-# -------------------------------------------------
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import logging
@@ -39,9 +37,7 @@ app.include_router(admin_router, prefix="/api/v1")
 app.include_router(websocket_router,prefix="/api/v1")
 
 @app.get("/")
-# -------------------------------------------------
 # root – health check endpoint
-# -------------------------------------------------
 async def root():
     return {
         "message": "Smart Queue Management API Running"

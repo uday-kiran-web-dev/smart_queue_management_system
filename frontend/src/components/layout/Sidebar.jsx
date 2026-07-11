@@ -9,6 +9,7 @@ import {
   Ticket,
   User,
   LogOut,
+  Clock,
 } from "lucide-react";
 
 import { AuthContext } from "../../context/AuthContext";
@@ -18,10 +19,10 @@ export default function Sidebar() {
   const isStudent = user?.role === "student";
 
   return (
-    <aside className="w-64 bg-slate-900 text-white p-6">
+    <aside className="w-64 bg-slate-900 text-white p-6 flex flex-col h-screen">
       <h2 className="text-2xl font-bold mb-8">Queue System</h2>
 
-      <nav className="space-y-4">
+      <nav className="space-y-4 flex-1">
         <NavLink
           to={isStudent ? "/student/dashboard" : "/admin/dashboard"}
           className={({ isActive }) =>
@@ -47,7 +48,7 @@ export default function Sidebar() {
               }
             >
               <Ticket size={20} />
-              Generate Token
+              Get Spot in Line
             </NavLink>
 
             <NavLink
@@ -59,8 +60,8 @@ export default function Sidebar() {
                 )
               }
             >
-              <Ticket size={20} />
-              My Queue
+              <Clock size={20} />
+              Status Tracker
             </NavLink>
           </>
         )}
@@ -77,7 +78,7 @@ export default function Sidebar() {
               }
             >
               <ClipboardList size={20} />
-              Tokens
+              Queue Management
             </NavLink>
 
             <NavLink
@@ -90,7 +91,7 @@ export default function Sidebar() {
               }
             >
               <Building2 size={20} />
-              Departments
+              Offices / Help Desks
             </NavLink>
 
             <NavLink

@@ -1,6 +1,4 @@
-# -------------------------------------------------
 # websocket.py – WebSocket endpoint routes
-# -------------------------------------------------
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect, status
 import logging
 
@@ -10,9 +8,7 @@ router = APIRouter()
 logger = logging.getLogger(__name__)
 
 
-# -------------------------------------------------
 # websocket_endpoint – handle WebSocket connections
-# -------------------------------------------------
 @router.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
     try:
