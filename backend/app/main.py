@@ -8,6 +8,7 @@ from app.api.v1.department import router as department_router
 from app.api.v1.queue import router as queue_router
 from app.api.v1.admin import router as admin_router
 from app.api.v1.websocket import router as websocket_router
+from app.core.config import ALLOWED_ORIGINS
 
 # Configure logging
 logging.basicConfig(
@@ -23,7 +24,7 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173", "http://localhost:8000", "http://127.0.0.1:8000"],
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
