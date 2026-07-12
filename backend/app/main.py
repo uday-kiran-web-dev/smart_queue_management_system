@@ -38,6 +38,7 @@ app.include_router(admin_router, prefix="/api/v1")
 app.include_router(websocket_router,prefix="/api/v1")
 
 @app.get("/")
+@app.head("/")
 # root – health check endpoint
 async def root():
     return {
