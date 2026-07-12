@@ -18,7 +18,7 @@ export default function QueueTable({ queue, onComplete, onSkip, onCancel, onCall
 
   return (
     <>
-      <div className="overflow-hidden rounded-xl bg-white shadow border border-slate-200">
+      <div className="overflow-x-auto rounded-xl bg-white shadow border border-slate-200">
         <table className="min-w-full">
           <thead className="bg-slate-800 text-white">
             <tr>

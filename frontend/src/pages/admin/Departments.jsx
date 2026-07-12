@@ -110,7 +110,7 @@ export default function Departments() {
           </div>
 
           {departments.length > 0 ? (
-            <div className="overflow-hidden rounded-lg border border-gray-200">
+            <div className="overflow-x-auto rounded-lg border border-gray-200">
               <table className="min-w-full">
                 <thead className="bg-slate-800 text-white">
                   <tr>
