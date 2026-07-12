@@ -28,7 +28,7 @@ export default function AdminDashboard() {
 
   return (
     <DashboardLayout title="Admin Dashboard">
-      <div className="grid gap-6 md:grid-cols-4">
+      <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard title="Waiting" value={stats.waiting} icon={Users} colorType="amber" />
         <StatCard title="Called" value={stats.called} icon={UserCheck} colorType="blue" />
         <StatCard title="Completed" value={stats.completed} icon={CheckCircle2} colorType="green" />
