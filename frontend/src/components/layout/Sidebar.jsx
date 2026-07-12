@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import clsx from "clsx";
 import {
   Building2,
@@ -18,6 +18,12 @@ import { AuthContext } from "../../context/AuthContext";
 export default function Sidebar({ open, setOpen }) {
   const { user, logout } = useContext(AuthContext);
   const isStudent = user?.role === "student";
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
 
   return (
     <aside 
@@ -139,7 +145,7 @@ export default function Sidebar({ open, setOpen }) {
 
       <div className="mt-auto p-6 border-t border-slate-700 bg-slate-900">
         <button
-          onClick={logout}
+          onClick={handleLogout}
           className="flex items-center gap-3 rounded-lg p-3 w-full hover:bg-red-600 transition"
         >
           <LogOut size={20} />
