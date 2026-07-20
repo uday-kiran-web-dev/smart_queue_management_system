@@ -21,10 +21,14 @@ app = FastAPI(
     title="Queue Management API",
     version="1.0.0"
 )
+origins = [
+    "http://localhost:5173",
+    "https://sqms-one.vercel.app",
+]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=ALLOWED_ORIGINS,
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
