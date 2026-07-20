@@ -41,7 +41,7 @@ export const getQueueHistory = async () => {
 };
 
 export const createDepartment = async ({ name, description }) => {
-  const response = await api.post("/departments/", {
+  const response = await api.post("/departments", {
     name,
     description,
   });
