@@ -1,93 +1,70 @@
 # =========================
 # Environment Variables
 # =========================
-
 .env
-.env.local
-.env.production
-.env.development
+.env.*
+!.env.example
 
 # =========================
-# Python
+# Python / Backend
 # =========================
-
 venv/
 .venv/
 env/
-
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
-
+*.py[cod]
+*$py.class
 .pytest_cache/
 .mypy_cache/
-
-# =========================
-# FastAPI
-# =========================
-
-*.log
-
-# =========================
-# Node / React
-# =========================
-
-node_modules/
-
-dist/
-build/
-
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# =========================
-# IDE
-# =========================
-
-.vscode/
-.idea/
-
-# =========================
-# OS Files
-# =========================
-
-.DS_Store
-Thumbs.db
-
-# =========================
-# Coverage Reports
-# =========================
-
 coverage/
 htmlcov/
 .coverage
-
-# =========================
-# Secrets
-# =========================
-
 secrets.json
 credentials.json
 
 # =========================
-# Database Dumps
+# Node / Frontend
 # =========================
+node_modules/
+dist/
+dist-ssr/
+build/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+*.local
 
+# =========================
+# IDEs & Editor
+# =========================
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# =========================
+# OS Files
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# Database & Temp
+# =========================
 *.bak
 *.sql
 *.dump
-
-# =========================
-# Temporary Files
-# =========================
-
 *.tmp
 *.temp
+*.log
 
 # =========================
 # Docker
 # =========================
-
 docker-compose.override.yml
